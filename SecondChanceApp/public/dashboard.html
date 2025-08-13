@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Chance - Recovery Dashboard</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="background-color" content="#1a1a2e">
+    <meta name="display" content="standalone">
+    <meta name="orientation" content="portrait-primary">
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Second Chance">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23667eea'/%3E%3Ctext x='90' y='110' font-family='Arial, sans-serif' font-size='70' text-anchor='middle' fill='white'%3E🛡️%3C/text%3E%3C/svg%3E">
+    
+    <!-- Windows PWA Support -->
+    <meta name="msapplication-TileColor" content="#667eea">
+    <meta name="msapplication-TileImage" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='144' height='144' viewBox='0 0 144 144'%3E%3Crect width='144' height='144' fill='%23667eea'/%3E%3Ctext x='72' y='88' font-family='Arial, sans-serif' font-size='60' text-anchor='middle' fill='white'%3E🛡️%3C/text%3E%3C/svg%3E">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; connect-src 'self' wss: https:; img-src 'self' data: https:;">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #06b6d4;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.1));
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 24px;
+        }
+
+        /* Real-time Status */
+        .status-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--success);
+        }
+
+        .status-card.warning::before { background: var(--warning); }
+        .status-card.danger::before { background: var(--danger); }
+        .status-card.info::before { background: var(--info); }
+
+        .status-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .status-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .status-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-change {
+            font-size: 0.75rem;
+            margin-top: 4px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .status-change.positive {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-change.negative {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Main Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            margin-right: 12px;
+        }
+
+        /* App List */
+        .app-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .app-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .app-item:hover {
+            background: #f1f5f9;
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .app-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 16px;
+            position: relative;
+        }
+
+        .app-blocked {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: var(--danger);
+        }
+
+        .app-allowed {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: var(--success);
+        }
+
+        .app-info {
+            flex: 1;
+        }
+
+        .app-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .app-package {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .app-stats {
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .block-count {
+            font-weight: 600;
+            color: var(--danger);
+            font-size: 1.1rem;
+        }
+
+        /* Request System */
+        .request-item {
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 16px;
+            border-left: 4px solid var(--warning);
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            position: relative;
+        }
+
+        .request-urgent {
+            border-left-color: var(--danger);
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .request-app {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .request-time {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .urgency-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .urgency-high {
+            background: var(--danger);
+            color: white;
+        }
+
+        .urgency-medium {
+            background: var(--warning);
+            color: white;
+        }
+
+        .urgency-low {
+            background: var(--info);
+            color: white;
+        }
+
+        .request-message {
+            font-style: italic;
+            color: var(--gray);
+            margin: 12px 0;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-approve {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-deny {
+            background: var(--gray);
+            color: white;
+        }
+
+        .btn-deny:hover {
+            background: #475569;
+            transform: translateY(-1px);
+        }
+
+        /* Analytics Chart */
+        .chart {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .chart-bars {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            height: 120px;
+            display: flex;
+            align-items: end;
+            gap: 8px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .chart-bar:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scaleY(1.1);
+        }
+
+        /* Crisis Support */
+        .crisis-card {
+            background: linear-gradient(135deg, #fef3c7, #fed7aa);
+            border: 2px solid var(--warning);
+            position: relative;
+        }
+
+        .crisis-urgent {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border-color: var(--danger);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 12px 40px rgba(239, 68, 68, 0.3); }
+        }
+
+        .crisis-numbers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .crisis-number {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+        }
+
+        .crisis-number-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--danger);
+            margin-bottom: 4px;
+        }
+
+        .crisis-number-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .crisis-button {
+            background: var(--danger);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            margin: 8px 4px;
+            transition: all 0.2s ease;
+        }
+
+        .crisis-button:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Loading States */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            border-left: 4px solid var(--success);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 16px; }
+            .header { padding: 24px; }
+            .title { font-size: 2rem; }
+            .status-bar { grid-template-columns: repeat(2, 1fr); }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">🛡️</div>
+            <h1 class="title">Second Chance</h1>
+            <p class="subtitle">Professional Recovery Support Dashboard</p>
+            <div id="connectionStatus" class="status-indicator"></div>
+        </header>
+
+        <div class="status-bar" id="statusBar">
+            <!-- Real-time status cards will be populated here -->
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span class="card-icon">📱</span>
+                        Monitored Applications
+                    </h2>
+                    <span id="appCount" class="loading"></span>
+                </div>
+                <div class="app-grid" id="appList">
+                    <!-- Apps will be loaded here -->
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span class="card-icon">📨</span>
+                        Admin Requests
+                    </h2>
+                    <span id="requestCount" class="loading"></span>
+                </div>
+                <div id="requestList">
+                    <!-- Requests will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span class="card-icon">📊</span>
+                        Recovery Analytics
+                    </h2>
+                </div>
+                <div class="chart">
+                    <div class="chart-bars" id="chartBars">
+                        <!-- Chart bars will be generated here -->
+                    </div>
+                </div>
+                <div id="stats">
+                    <p><strong>Clean Days:</strong> <span id="cleanDays">Loading...</span></p>
+                    <p><strong>Total Blocks:</strong> <span id="totalBlocks">Loading...</span></p>
+                    <p><strong>Success Rate:</strong> <span id="successRate">Loading...</span></p>
+                </div>
+            </div>
+
+            <div class="card crisis-card" id="crisisCard">
+                <div class="card-header">
+                    <h2 class="card-title" style="color: var(--danger);">
+                        <span class="card-icon">🆘</span>
+                        Crisis Support
+                    </h2>
+                </div>
+                <div class="crisis-numbers">
+                    <div class="crisis-number">
+                        <div class="crisis-number-value">988</div>
+                        <div class="crisis-number-label">Suicide Prevention</div>
+                    </div>
+                    <div class="crisis-number">
+                        <div class="crisis-number-value">741741</div>
+                        <div class="crisis-number-label">Crisis Text Line</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="tel:988" class="crisis-button">📞 Call 988</a>
+                    <a href="sms:741741?body=HOME" class="crisis-button">💬 Text HOME</a>
+                </div>
+            </div>
+        </div>
+
+        <button class="fab" onclick="showAddAppModal()">+</button>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let socket = null;
+        let lastUpdate = null;
+
+        class SecondChanceDashboard {
+            constructor() {
+                this.apiBase = 'http://localhost:3333';
+                this.init();
+            }
+
+            async init() {
+                await this.loadData();
+                this.setupRealTimeUpdates();
+                this.setupEventListeners();
+                
+                // Auto-refresh every 30 seconds (disabled temporarily to fix infinite loop)
+                // setInterval(() => this.loadData(), 30000);
+            }
+
+            async loadData() {
+                try {
+                    const [appsData, requestsData, statsData] = await Promise.all([
+                        fetch(`${this.apiBase}/api/monitored-apps`).then(r => r.json()),
+                        fetch(`${this.apiBase}/api/admin-requests`).then(r => r.json()),
+                        fetch(`${this.apiBase}/api/user/stats`).then(r => r.json())
+                    ]);
+
+                    this.updateStatusBar(appsData, requestsData, statsData);
+                    this.updateAppList(appsData.apps);
+                    this.updateRequestList(requestsData.requests);
+                    this.updateStats(statsData);
+                    
+                    lastUpdate = new Date();
+                    this.updateConnectionStatus(true);
+                    
+                } catch (error) {
+                    console.error('Failed to load data:', error);
+                    this.updateConnectionStatus(false);
+                }
+            }
+
+            updateStatusBar(appsData, requestsData, statsData) {
+                const statusBar = document.getElementById('statusBar');
+                const pendingRequests = requestsData.requests.filter(r => r.status === 'pending');
+                
+                statusBar.innerHTML = `
+                    <div class="status-card">
+                        <div class="status-value pulse">✅</div>
+                        <div class="status-label">System Status</div>
+                        <div class="status-change positive">Active</div>
+                    </div>
+                    <div class="status-card ${appsData.blocked > 0 ? 'warning' : 'info'}">
+                        <div class="status-value">${appsData.blocked}</div>
+                        <div class="status-label">Apps Blocked</div>
+                        <div class="status-change">${appsData.total} total</div>
+                    </div>
+                    <div class="status-card ${pendingRequests.length > 0 ? 'danger' : 'info'}">
+                        <div class="status-value">${pendingRequests.length}</div>
+                        <div class="status-label">Pending Requests</div>
+                        <div class="status-change">${requestsData.total} total</div>
+                    </div>
+                    <div class="status-card info">
+                        <div class="status-value">${statsData.cleanDays || 0}</div>
+                        <div class="status-label">Clean Days</div>
+                        <div class="status-change positive">+${statsData.currentStreak || 0} streak</div>
+                    </div>
+                `;
+            }
+
+            updateAppList(apps) {
+                const appList = document.getElementById('appList');
+                const appCount = document.getElementById('appCount');
+                
+                appCount.textContent = apps.length;
+                appCount.className = '';
+                
+                appList.innerHTML = apps.map(app => `
+                    <div class="app-item" onclick="dashboard.toggleAppStatus('${app.id}')">
+                        <div class="app-icon ${app.isBlocked ? 'app-blocked' : 'app-allowed'}">
+                            ${app.icon || '📱'}
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">${app.name}</div>
+                            <div class="app-package">${app.packageName}</div>
+                        </div>
+                        <div class="app-stats">
+                            <div class="block-count">${app.blockCount || 0}</div>
+                            <div>blocks today</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateRequestList(requests) {
+                const requestList = document.getElementById('requestList');
+                const requestCount = document.getElementById('requestCount');
+                const pendingRequests = requests.filter(r => r.status === 'pending');
+                
+                requestCount.textContent = pendingRequests.length;
+                requestCount.className = '';
+                
+                if (pendingRequests.length === 0) {
+                    requestList.innerHTML = '<div style="text-align: center; color: var(--gray); padding: 32px;">No pending requests 🎉</div>';
+                    return;
+                }
+
+                requestList.innerHTML = pendingRequests.map(request => `
+                    <div class="request-item ${request.urgency === 'high' ? 'request-urgent' : ''}">
+                        <div class="urgency-badge urgency-${request.urgency}">${request.urgency}</div>
+                        <div class="request-header">
+                            <div class="request-app">${request.appName}</div>
+                            <div class="request-time">${this.formatTime(request.timestamp)}</div>
+                        </div>
+                        <div style="color: var(--gray); margin-bottom: 8px;">${request.reason}</div>
+                        ${request.userMessage ? `<div class="request-message">"${request.userMessage}"</div>` : ''}
+                        <div class="request-actions">
+                            <button class="btn btn-approve" onclick="dashboard.handleRequest('${request.id}', 'approved')">
+                                ✅ Approve
+                            </button>
+                            <button class="btn btn-deny" onclick="dashboard.handleRequest('${request.id}', 'denied')">
+                                ❌ Deny
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateStats(stats) {
+                document.getElementById('cleanDays').textContent = stats.cleanDays || 0;
+                document.getElementById('totalBlocks').textContent = stats.totalBlocked || 0;
+                document.getElementById('successRate').textContent = `${stats.recoveryScore || 0}%`;
+                
+                // Update chart
+                if (stats.weeklyData) {
+                    this.updateChart(stats.weeklyData);
+                }
+            }
+
+            updateChart(weeklyData) {
+                const chartBars = document.getElementById('chartBars');
+                const maxBlocks = Math.max(...weeklyData.map(d => d.blocks));
+                
+                chartBars.innerHTML = weeklyData.map((day, index) => {
+                    const height = (day.blocks / maxBlocks) * 100;
+                    return `<div class="chart-bar" style="height: ${height}%" title="${day.day}: ${day.blocks} blocks, ${day.requests} requests"></div>`;
+                }).join('');
+            }
+
+            async handleRequest(requestId, action) {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/admin-requests/${requestId}/${action}`, {
+                        method: 'POST'
+                    });
+                    
+                    if (response.ok) {
+                        this.showNotification(`Request ${action}!`, action === 'approved' ? 'success' : 'info');
+                        await this.loadData();
+                    } else {
+                        throw new Error('Failed to update request');
+                    }
+                } catch (error) {
+                    this.showNotification('Failed to update request', 'error');
+                    console.error('Error handling request:', error);
+                }
+            }
+
+            async toggleAppStatus(appId) {
+                // This would implement app blocking/unblocking
+                console.log('Toggle app status:', appId);
+                this.showNotification('App status updated', 'success');
+            }
+
+            showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = `notification ${type} show`;
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            updateConnectionStatus(connected) {
+                const indicator = document.getElementById('connectionStatus');
+                if (connected) {
+                    indicator.innerHTML = '<span style="color: var(--success); font-size: 0.8rem;">● Connected</span>';
+                } else {
+                    indicator.innerHTML = '<span style="color: var(--danger); font-size: 0.8rem;">● Disconnected</span>';
+                }
+            }
+
+            setupRealTimeUpdates() {
+                // Implement WebSocket connection for real-time updates
+                try {
+                    socket = new WebSocket(`ws://${window.location.host}`);
+                    socket.onmessage = (event) => {
+                        const data = JSON.parse(event.data);
+                        if (data.type === 'app_blocked') {
+                            this.showNotification(`${data.appName} blocked!`, 'warning');
+                            this.loadData();
+                        }
+                    };
+                } catch (error) {
+                    console.log('WebSocket not available, using polling');
+                }
+            }
+
+            setupEventListeners() {
+                // Setup keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.key === 'r') {
+                        e.preventDefault();
+                        this.loadData();
+                        this.showNotification('Data refreshed', 'info');
+                    }
+                });
+
+                // Crisis mode detection
+                const crisisCard = document.getElementById('crisisCard');
+                let crisisClicks = 0;
+                crisisCard.addEventListener('click', () => {
+                    crisisClicks++;
+                    if (crisisClicks >= 3) {
+                        crisisCard.classList.add('crisis-urgent');
+                        this.showNotification('Crisis mode activated - immediate help available', 'error');
+                    }
+                });
+            }
+
+            formatTime(timestamp) {
+                const date = new Date(timestamp);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                
+                if (diffMins < 1) return 'Just now';
+                if (diffMins < 60) return `${diffMins}m ago`;
+                if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
+                return date.toLocaleDateString();
+            }
+        }
+
+        // Initialize dashboard
+        const dashboard = new SecondChanceDashboard();
+        
+        // Register Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    console.log('🛡️ Service Worker registered for Second Chance:', registration);
+                    
+                    // Handle service worker updates
+                    registration.addEventListener('updatefound', () => {
+                        console.log('🔄 Service Worker update found');
+                        const newWorker = registration.installing;
+                        
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // Show update notification
+                                dashboard.showNotification('App updated! Refresh to see changes.', 'info');
+                            }
+                        });
+                    });
+                    
+                    // Listen for service worker messages
+                    navigator.serviceWorker.addEventListener('message', (event) => {
+                        if (event.data.type === 'DATA_SYNCED') {
+                            console.log('📡 Data synced in background');
+                            dashboard.loadData();
+                        }
+                    });
+                    
+                } catch (error) {
+                    console.error('❌ Service Worker registration failed:', error);
+                }
+            });
+            
+            // Handle offline/online status
+            window.addEventListener('offline', () => {
+                dashboard.showNotification('You are offline. Crisis support (988, 741741) still available!', 'warning');
+                document.body.classList.add('offline');
+            });
+            
+            window.addEventListener('online', () => {
+                dashboard.showNotification('You are back online!', 'success');
+                document.body.classList.remove('offline');
+                dashboard.loadData();
+                
+                // Trigger background sync
+                if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+                    navigator.serviceWorker.ready.then((registration) => {
+                        registration.sync.register('recovery-data-sync');
+                    });
+                }
+            });
+        }
+        
+        // Add offline indicator styles
+        const offlineStyles = document.createElement('style');
+        offlineStyles.textContent = `
+            .offline .header::after {
+                content: '📶 OFFLINE - Crisis support still available: 988, 741741';
+                display: block;
+                background: #ef4444;
+                color: white;
+                padding: 10px;
+                text-align: center;
+                font-weight: bold;
+                border-radius: 8px;
+                margin-top: 15px;
+                animation: pulse 2s infinite;
+            }
+        `;
+        document.head.appendChild(offlineStyles);
+        
+        // Simulate app detection for demo
+        async function simulateDetection(appId) {
+            try {
+                const response = await fetch(`/api/simulate-detection/${appId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'Testing app detection' })
+                });
+                const result = await response.json();
+                dashboard.showNotification(result.message, result.blocked ? 'warning' : 'info');
+                dashboard.loadData();
+            } catch (error) {
+                console.error('Simulation error:', error);
+            }
+        }
+
+        // Demo mode - simulate activity
+        if (window.location.search.includes('demo=true')) {
+            setInterval(() => {
+                simulateDetection(Math.random() > 0.5 ? '1' : '2');
+            }, 30000);
+        }
+    </script>
+</body>
+</html>

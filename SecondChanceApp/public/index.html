@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Chance - Recovery Support Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #764ba2;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .status-bar {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .status-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            color: #333;
+            flex-grow: 1;
+        }
+
+        .app-list {
+            list-style: none;
+        }
+
+        .app-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .app-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+
+        .app-blocked {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .app-allowed {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .app-info {
+            flex-grow: 1;
+        }
+
+        .app-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .app-package {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .blocked {
+            background: #f5576c;
+            color: white;
+        }
+
+        .allowed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .request-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 8px;
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .request-app {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .request-time {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-approve:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
+        }
+
+        .btn-deny {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .btn-deny:hover {
+            background: #dee2e6;
+        }
+
+        .crisis-card {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .crisis-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .crisis-description {
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .crisis-button {
+            background: white;
+            color: #fa709a;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .crisis-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .floating-add {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(118, 75, 162, 0.3);
+            transition: all 0.3s;
+        }
+
+        .floating-add:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+
+        .chart {
+            height: 200px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 30px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px 5px 0 0;
+            transition: height 0.3s;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🛡️</div>
+            <h1>Second Chance</h1>
+            <p class="tagline">Recovery Support Dashboard</p>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-value pulse">✅</div>
+                <div class="status-label">System Active</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="blockedCount">2</div>
+                <div class="status-label">Apps Blocked</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="requestCount">3</div>
+                <div class="status-label">Pending Requests</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="adminStatus">👤</div>
+                <div class="status-label">Admin: Sarah</div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Monitored Apps Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📱</span>
+                    <h2 class="card-title">Monitored Apps</h2>
+                </div>
+                <ul class="app-list" id="appList">
+                    <!-- Apps will be loaded here -->
+                </ul>
+            </div>
+
+            <!-- Admin Requests Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📨</span>
+                    <h2 class="card-title">Admin Requests</h2>
+                </div>
+                <div id="requestList">
+                    <!-- Requests will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Usage Statistics Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📊</span>
+                    <h2 class="card-title">Usage Statistics</h2>
+                </div>
+                <div class="chart">
+                    <div class="chart-bar" style="left: 20px; height: 60%;"></div>
+                    <div class="chart-bar" style="left: 60px; height: 40%;"></div>
+                    <div class="chart-bar" style="left: 100px; height: 80%;"></div>
+                    <div class="chart-bar" style="left: 140px; height: 30%;"></div>
+                    <div class="chart-bar" style="left: 180px; height: 50%;"></div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <p><strong>Today:</strong> 3 blocks, 2 requests</p>
+                    <p><strong>This Week:</strong> 18 blocks, 12 requests</p>
+                    <p><strong>Success Rate:</strong> 85% avoided triggers</p>
+                </div>
+            </div>
+
+            <!-- Crisis Support Card -->
+            <div class="card crisis-card">
+                <div class="card-header">
+                    <span class="card-icon">🆘</span>
+                    <h2 class="card-title" style="color: white;">Crisis Support</h2>
+                </div>
+                <div class="crisis-number">988</div>
+                <p class="crisis-description">24/7 Suicide & Crisis Lifeline</p>
+                <div class="crisis-number">741741</div>
+                <p class="crisis-description">Text HOME for Crisis Support</p>
+                <a href="tel:988" class="crisis-button">Call Now</a>
+            </div>
+        </div>
+
+        <!-- Add App Modal -->
+        <div id="addAppModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Add App to Monitor</h2>
+                </div>
+                <form id="addAppForm">
+                    <div class="form-group">
+                        <label class="form-label">App Name</label>
+                        <input type="text" class="form-input" id="appNameInput" placeholder="e.g., Instagram" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Package Name</label>
+                        <input type="text" class="form-input" id="packageNameInput" placeholder="e.g., com.instagram.android" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Block Status</label>
+                        <select class="form-input" id="blockStatusInput">
+                            <option value="true">Blocked</option>
+                            <option value="false">Allowed</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-approve">Add App</button>
+                        <button type="button" class="btn btn-deny" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Floating Add Button -->
+        <div class="floating-add" onclick="openModal()">+</div>
+    </div>
+
+    <script>
+        // Load monitored apps
+        async function loadApps() {
+            try {
+                const response = await fetch('/api/monitored-apps');
+                const data = await response.json();
+                const appList = document.getElementById('appList');
+                
+                appList.innerHTML = data.apps.map(app => `
+                    <li class="app-item">
+                        <div class="app-icon ${app.isBlocked ? 'app-blocked' : 'app-allowed'}">
+                            ${app.name === 'Snapchat' ? '👻' : app.name === 'Telegram' ? '✈️' : '📱'}
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">${app.name}</div>
+                            <div class="app-package">${app.packageName}</div>
+                        </div>
+                        <span class="status-badge ${app.isBlocked ? 'blocked' : 'allowed'}">
+                            ${app.isBlocked ? 'Blocked' : 'Allowed'}
+                        </span>
+                    </li>
+                `).join('');
+                
+                // Update blocked count
+                const blockedCount = data.apps.filter(app => app.isBlocked).length;
+                document.getElementById('blockedCount').textContent = blockedCount;
+            } catch (error) {
+                console.error('Error loading apps:', error);
+            }
+        }
+
+        // Load admin requests
+        async function loadRequests() {
+            try {
+                const response = await fetch('/api/admin-requests');
+                const data = await response.json();
+                const requestList = document.getElementById('requestList');
+                
+                const pendingRequests = data.requests.filter(req => req.status === 'pending');
+                document.getElementById('requestCount').textContent = pendingRequests.length;
+                
+                requestList.innerHTML = pendingRequests.map(request => `
+                    <div class="request-item">
+                        <div class="request-header">
+                            <span class="request-app">${request.appName}</span>
+                            <span class="request-time">${new Date(request.timestamp).toLocaleTimeString()}</span>
+                        </div>
+                        <p>${request.reason}</p>
+                        <div class="request-actions">
+                            <button class="btn btn-approve" onclick="handleRequest('${request.id}', 'approved')">
+                                Approve Access
+                            </button>
+                            <button class="btn btn-deny" onclick="handleRequest('${request.id}', 'denied')">
+                                Deny
+                            </button>
+                        </div>
+                    </div>
+                `).join('') || '<p style="text-align: center; color: #666;">No pending requests</p>';
+            } catch (error) {
+                console.error('Error loading requests:', error);
+            }
+        }
+
+        // Handle request approval/denial
+        async function handleRequest(requestId, status) {
+            try {
+                const response = await fetch(`/api/admin-requests/${requestId}/${status}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    loadRequests();
+                    showNotification(`Request ${status}!`);
+                }
+            } catch (error) {
+                console.error('Error handling request:', error);
+            }
+        }
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('addAppModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('addAppModal').style.display = 'none';
+        }
+
+        // Add app form submission
+        document.getElementById('addAppForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const appData = {
+                name: document.getElementById('appNameInput').value,
+                packageName: document.getElementById('packageNameInput').value,
+                isBlocked: document.getElementById('blockStatusInput').value === 'true'
+            };
+            
+            // Here you would POST to your API
+            console.log('Adding app:', appData);
+            
+            closeModal();
+            loadApps();
+            showNotification('App added successfully!');
+        });
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                z-index: 2000;
+                animation: slideIn 0.3s;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Auto-refresh data
+        setInterval(() => {
+            loadApps();
+            loadRequests();
+        }, 10000);
+
+        // Initial load
+        loadApps();
+        loadRequests();
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('addAppModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

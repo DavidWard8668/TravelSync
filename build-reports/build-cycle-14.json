@@ -1,0 +1,20 @@
+﻿{
+    "BuildResults":  {
+
+                     },
+    "Timestamp":  {
+                      "value":  "\/Date(1754716708681)\/",
+                      "DisplayHint":  2,
+                      "DateTime":  "09 August 2025 06:18:28"
+                  },
+    "QualityResults":  {
+
+                       },
+    "CycleNumber":  14,
+    "Summary":  {
+                    "QualityTotal":  0,
+                    "BuildTotal":  0,
+                    "BuildPassed":  0,
+                    "QualityPassed":  0
+                }
+}

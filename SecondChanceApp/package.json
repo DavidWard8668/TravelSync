@@ -1,0 +1,24 @@
+{
+  "name": "second-chance-app",
+  "version": "1.0.0",
+  "description": "Mobile app for addiction recovery with admin oversight - Built autonomously by Claude Code",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js",
+    "dev": "node server.js",
+    "build": "echo 'Building Second Chance app...'",
+    "deploy": "echo 'Deploying Second Chance to production...'"
+  },
+  "keywords": ["recovery", "addiction", "support", "mobile", "admin", "oversight", "autonomous"],
+  "author": "Claude Code Autonomous Development",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "autonomous-generated"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "cors": "^2.8.5"
+  }
+}

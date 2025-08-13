@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowStateChanged|typeWindowContentChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault|flagReportViewIds|flagRetrieveInteractiveWindows"
+    android:canRetrieveWindowContent="true"
+    android:canRequestFilterKeyEvents="true"
+    android:canRequestTouchExplorationMode="false"
+    android:notificationTimeout="100"
+    android:packageNames="com.snapchat.android,org.telegram.messenger,com.whatsapp,org.thoughtcrime.securesms"
+    android:description="@string/accessibility_service_description"
+    android:settingsActivity="com.secondchancemobile.MainActivity" />
+
+<!--
+This accessibility service configuration defines how Second Chance monitors app usage.
+
+Key settings:
+- accessibilityEventTypes: Monitors window state changes to detect app launches
+- accessibilityFlags: Allows retrieving window content and view IDs for accurate detection
+- canRetrieveWindowContent: Enables reading screen content to identify specific apps
+- canRequestFilterKeyEvents: Allows intercepting certain key events if needed
+- packageNames: Specific apps to monitor (can be updated dynamically)
+- notificationTimeout: Fast response time for real-time monitoring
+
+The service description helps users understand why accessibility permissions are needed.
+This is shown when users enable the accessibility service in Android Settings.
+
+Security considerations:
+- Only monitors specified package names, not all system activity
+- Does not store or transmit sensitive screen content
+- Used solely for recovery support and app blocking functionality
+- All monitoring is local to the device for privacy protection
+-->

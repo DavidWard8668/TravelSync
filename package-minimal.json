@@ -1,0 +1,13 @@
+{
+  "name": "second-chance-recovery",
+  "version": "1.0.0-beta",
+  "type": "module",
+  "scripts": {
+    "start": "node working-server.js",
+    "dev": "node working-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

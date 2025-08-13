@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Second Chance</string>
+    
+    <!-- Accessibility Service Description -->
+    <string name="accessibility_service_description">
+        Second Chance uses accessibility services to monitor and block access to apps that may trigger relapse during recovery.
+        
+        How it works:
+        • Detects when you try to open monitored apps (like Snapchat, Telegram)
+        • Shows a supportive blocking screen instead of allowing access
+        • Sends permission requests to your recovery admin
+        • Helps you stay strong during moments of weakness
+        
+        Privacy & Security:
+        • Only monitors specific apps you choose to block
+        • Does not read or store personal messages or content
+        • All monitoring happens locally on your device
+        • Your recovery admin only receives permission requests, not personal data
+        
+        This service is essential for Second Chance to provide effective recovery support. You can disable it anytime through Android Settings → Accessibility.
+    </string>
+    
+    <!-- Device Admin Description -->
+    <string name="device_admin_description">
+        Second Chance needs device administrator privileges to protect your recovery progress.
+        
+        This prevents:
+        • Uninstalling the app during moments of weakness
+        • Bypassing protection by removing the app
+        • Disabling monitoring without proper authorization
+        
+        Your recovery admin will be notified if someone tries to remove these protections.
+    </string>
+    
+    <!-- Notification Channel Names -->
+    <string name="monitoring_channel_name">App Monitoring</string>
+    <string name="monitoring_channel_description">Background service for monitoring blocked apps</string>
+    
+    <string name="alerts_channel_name">Recovery Alerts</string>
+    <string name="alerts_channel_description">Urgent notifications for recovery support</string>
+    
+    <!-- Common UI Text -->
+    <string name="app_blocked_title">App Blocked</string>
+    <string name="app_blocked_message">This app is blocked as part of your recovery protection.</string>
+    <string name="request_permission">Request Permission</string>
+    <string name="need_support">Need Support?</string>
+    <string name="crisis_hotline">Call 988 - Crisis Lifeline</string>
+    <string name="return_home">Return to Home</string>
+    
+    <!-- Setup Messages -->
+    <string name="setup_welcome">Welcome to Second Chance</string>
+    <string name="setup_admin_title">Choose Your Recovery Admin</string>
+    <string name="setup_apps_title">Select Apps to Monitor</string>
+    <string name="setup_protection_title">Set Up Protection</string>
+    
+    <!-- Error Messages -->
+    <string name="error_no_admin">Please set up a recovery admin first</string>
+    <string name="error_no_apps">Please select at least one app to monitor</string>
+    <string name="error_permissions">Required permissions not granted</string>
+    <string name="error_device_admin">Device administrator privileges required</string>
+    <string name="error_accessibility">Accessibility service must be enabled</string>
+    
+    <!-- Success Messages -->
+    <string name="setup_complete">Second Chance protection is now active</string>
+    <string name="admin_notified">Your recovery admin has been notified</string>
+    <string name="request_sent">Permission request sent</string>
+    
+    <!-- Admin Messages -->
+    <string name="admin_request_title">App Access Request</string>
+    <string name="admin_request_message">Your friend is requesting access to a blocked app</string>
+    <string name="admin_crisis_title">Crisis Alert</string>
+    <string name="admin_uninstall_title">Uninstall Attempt</string>
+    
+    <!-- Crisis Support -->
+    <string name="crisis_support_message">
+        If you\'re in crisis or having thoughts of self-harm:
+        
+        🆘 Call 988 - Suicide & Crisis Lifeline
+        📱 Text "HELLO" to 741741 - Crisis Text Line
+        🌐 Visit suicidepreventionlifeline.org
+        
+        You are not alone. Help is available 24/7.
+    </string>
+    
+    <!-- Recovery Messages -->
+    <string name="stay_strong_title">Stay Strong</string>
+    <string name="stay_strong_message">
+        Recovery is a journey with ups and downs. You\'ve made it this far - that\'s something to be proud of.
+        
+        Remember why you started this journey. Your future self will thank you for staying strong today.
+    </string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Second Chance Settings</string>
+    <string name="change_admin">Change Recovery Admin</string>
+    <string name="update_apps">Update Monitored Apps</string>
+    <string name="change_pin">Change Protection PIN</string>
+    <string name="view_history">View Usage History</string>
+    <string name="crisis_resources">Crisis Resources</string>
+    
+    <!-- Permissions -->
+    <string name="permission_explanation">
+        Second Chance needs these permissions to protect your recovery:
+        
+        • Device Administrator: Prevents app uninstallation
+        • Accessibility: Monitors and blocks specified apps
+        • Phone/SMS: Contacts your recovery admin when needed
+        • Notifications: Shows alerts and blocking screens
+        
+        All permissions are used solely for recovery support.
+    </string>
+</resources>
