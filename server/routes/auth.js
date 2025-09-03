@@ -1,9 +1,8 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import db from '../database/init.js';
-import { sendEmail } from '../utils/email.js';
+import { database } from '../database/init.js';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'second-chance-recovery-secret-key';
@@ -36,7 +35,7 @@ router.post('/register', async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = db.prepare('SELECT id FROM users WHERE email = ?').get(email.toLowerCase());
+    const existingUser = await database.get('SELECT id FROM users WHERE email = ?', email.toLowerCase());
     if (existingUser) {
       return res.status(409).json({ 
         error: 'User with this email already exists' 
@@ -48,12 +47,10 @@ router.post('/register', async (req, res) => {
     const userId = uuidv4();
 
     // Create user
-    const insertUser = db.prepare(`
+    await database.run(`
       INSERT INTO users (id, email, password_hash, role, name, phone, created_at, last_active)
       VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
-    `);
-    
-    insertUser.run(userId, email.toLowerCase(), passwordHash, role, name, phone || null);
+    `, userId, email.toLowerCase(), passwordHash, role, name, phone || null);
 
     // If client is registering with invitation code, create relationship
     if (role === 'client' && invitationCode) {
