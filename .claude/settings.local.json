@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(git remote add:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Read(//c/Users/David/Apps/Travel-Sync/**)",
+      "Bash(git remote remove:*)"
     ],
     "deny": [],
     "ask": []
