@@ -1,5 +1,0 @@
-[2025-08-08 23:45:21] Starting night testing workflow...
-[2025-08-08 23:45:21] Will run until 7:00 AM
-[2025-08-08 23:45:21] Night testing completed at 08/08/2025 23:45:21
-[2025-08-08 23:45:21] Total cycles: 0
-[2025-08-08 23:45:21] Final summary saved

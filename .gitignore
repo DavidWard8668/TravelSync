@@ -8,6 +8,11 @@ pnpm-debug.log*
 # Production build
 dist/
 build/
+builds/
+build-outputs/
+build-reports/
+apks/
+test-results/
 
 # Environment variables
 .env
@@ -32,8 +37,14 @@ ehthumbs.db
 Thumbs.db
 
 # Logs
-logs
+logs/
 *.log
+build-log.txt
+night-test-log.txt
+night-testing-*.txt
+continuous-build-summary.txt
+robust-test.log
+*-log.txt
 
 # Runtime data
 pids
